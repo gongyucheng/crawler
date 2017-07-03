@@ -94,11 +94,10 @@ class MysqlTwistedPipline(object):
     def do_insert(self, cursor, item):
         #执行具体的插入
         #根据不同的item 构建不同的sql语句并插入到mysql中
-        # insert_sql, params = item.get_insert_sql()
-        # print (insert_sql, params)
-        # cursor.execute(insert_sql, params)
-        insert_sql = 'insert ignore into product(productName, img,brand, remark, description,number,guige,place,category)' \
-                     'VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s)'
-        cursor.execute(insert_sql, (
-            item["productName"], item["img"], item["brand"], item["remark"] or "", item["description"] or "",
-            item["number"], item["guige"] or "", item["place"] or "", item["category"]))
+        insert_sql, params = item.get_insert_sql()
+        cursor.execute(insert_sql, params)
+        # insert_sql = 'insert ignore into product(productName, img,brand, remark, description,number,guige,place,category)' \
+        #              'VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s)'
+        # cursor.execute(insert_sql, (
+        #     item["productName"], item["img"], item["brand"], item["remark"] or "", item["description"] or "",
+        #     item["number"], item["guige"] or "", item["place"] or "", item["category"]))

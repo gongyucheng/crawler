@@ -52,9 +52,10 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'lefeng.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'lefeng.middlewares.PhantomJSMiddleware': 100,
+   'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,#关闭默认下载器
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -87,6 +88,7 @@ SPIDER_MIDDLEWARES = {
    #'scrapy_magicfields.MagicFieldsMiddleware': 51,
 }
 DELTAFETCH_ENABLED = True
+DELTAFETCH_RESET = True
 # MAGICFIELDS_ENABLED = True
 # MAGIC_FIELDS = {
 #     #"timestamp": "$time",
