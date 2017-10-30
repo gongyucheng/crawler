@@ -1,0 +1,9 @@
+scrapy
+selenium
+six
+pymongo
+pillow
+requests
+schedule
+beautifulsoup4
+redis

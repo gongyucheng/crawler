@@ -14,6 +14,20 @@ BOT_NAME = 'lefeng'
 SPIDER_MODULES = ['lefeng.spiders']
 NEWSPIDER_MODULE = 'lefeng.spiders'
 
+# Enables scheduling storing requests queue in redis.
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# # Ensure all spiders share same duplicates filter through redis.
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+#
+# # Don't cleanup redis queues, allows to pause/resume crawls.
+# SCHEDULER_PERSIST = True
+#
+# # Schedule requests using a priority queue. (default)
+# SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.PriorityQueue'
+# REDIS_HOST = 'localhost'
+#
+# REDIS_PORT = 6379
+#
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'lefeng (+http://www.yourdomain.com)'
@@ -55,6 +69,8 @@ ROBOTSTXT_OBEY = False
 DOWNLOADER_MIDDLEWARES = {
    'lefeng.middlewares.PhantomJSMiddleware': 100,
    'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,#关闭默认下载器
+    'lefeng.useragent.UserAgent': 102,
+    'lefeng.proxymiddlewares.ProxyMiddleware': 101,
 }
 
 # Enable or disable extensions
@@ -72,13 +88,14 @@ ITEM_PIPELINES = {
  #'lefeng.pipelines.ArticleImagePipeline': 3,
    # 'lefeng.pipelines.MysqlPipeline':2,
   'lefeng.pipelines.MysqlTwistedPipline': 3,
+'scrapy_redis.pipelines.RedisPipeline': 300
 }
 IMAGES_URLS_FIELD = "front_image_url"
 project_dir = os.path.abspath(os.path.dirname(__file__))
 IMAGES_STORE = os.path.join(project_dir, 'images/防晒')
 
 # 爬取间隔
-#DOWNLOAD_DELAY = 0.25
+DOWNLOAD_DELAY = 0.25
 
 # 禁用cookie
 COOKIES_ENABLED = False

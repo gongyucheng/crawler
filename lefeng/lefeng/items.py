@@ -21,6 +21,19 @@ class LefengItem(scrapy.Item):
     number = scrapy.Field()
     category = scrapy.Field()
 
+    def get_insert_sql(self):
+
+        insert_sql = """
+                 insert ignore into product_copy(productName, img,brand, remark, description,number,guige,place,category)' \
+        #              'VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s)
+              """
+        # ON DUPLICATE KEY UPDATE content=VALUES(fav_nums)
+
+        params = (
+             self["productName"], self["img"], self["brand"], self["remark"] or "", self["description"] or "",
+             self["number"], self["guige"] or "", self["place"] or "", self["category"])
+        return insert_sql, params
+
     pass
 #美丽修行item
 class MeiLiItem(scrapy.Item):
