@@ -57,8 +57,13 @@ class LefengSpiderMiddleware(object):
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
-# global  driver
+global  driver
 # driver= webdriver.PhantomJS('/Users/gary/Downloads/phantomjs-2.1.1-macosx/bin/phantomjs') #指定使用的浏览器，写在此处而不写在类中，是为了不每次调用都生成一个信息独享，减少内存使用
+service_args = []
+service_args.append('--load-images=no')  ##关闭图片加载
+service_args.append('--disk-cache=yes')  ##开启缓存
+service_args.append('--ignore-ssl-errors=true')  ##忽略https错误
+driver = webdriver.PhantomJS('./phantomjs-2.1.1-macosx/bin/phantomjs', service_args=service_args)
 class PhantomJSMiddleware(object):
 
     @classmethod
@@ -67,12 +72,12 @@ class PhantomJSMiddleware(object):
         if 'PhantomJS' in request.meta:
            # global driver
             #性能优化
-            service_args = []
-            service_args.append('--load-images=no')  ##关闭图片加载
-            service_args.append('--disk-cache=yes')  ##开启缓存
-            service_args.append('--ignore-ssl-errors=true')  ##忽略https错误
+            # service_args = []
+            # service_args.append('--load-images=no')  ##关闭图片加载
+            # service_args.append('--disk-cache=yes')  ##开启缓存
+            # service_args.append('--ignore-ssl-errors=true')  ##忽略https错误
 
-            driver = webdriver.PhantomJS('/Users/gary/Downloads/phantomjs-2.1.1-macosx/bin/phantomjs',service_args=service_args)
+            # driver = webdriver.PhantomJS('./phantomjs-2.1.1-macosx/bin/phantomjs',service_args=service_args)
             driver.implicitly_wait(10)        ##设置超时时间
             driver.set_page_load_timeout(10)  ##设置超时时间
             driver.get(request.url)

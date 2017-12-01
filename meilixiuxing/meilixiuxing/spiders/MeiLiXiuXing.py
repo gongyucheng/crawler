@@ -4,14 +4,10 @@ import datetime
 from scrapy.http import Request
 from urllib import parse
 from scrapy.loader import ItemLoader
-from lefeng.items import MeiLiItem
-from lefeng.items import MeiLiIngredientItem
+from meilixiuxing.items import MeiLiItem
+from meilixiuxing.items import MeiLiIngredientItem
 import time
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
-from  selenium import webdriver
-
-from selenium.webdriver.support.wait import WebDriverWait
+from scrapy_splash import SplashRequest
 
 
 class MeiLiXiuXing(scrapy.Spider):
@@ -21,31 +17,18 @@ class MeiLiXiuXing(scrapy.Spider):
     allowed_domains = ["www.bevol.cn"]
     url = 'https://www.bevol.cn/product?category=6'
     start_urls = [url]
-    # rules = (
-    #     # 提取匹配 'category.php' (但不匹配 'subsection.php') 的链接并跟进链接(没有callback意味着follow默认为True)
-    #     Rule(LinkExtractor(allow=(r'.*/product\?category=\d+',)),callback='parse_home',follow=True),
-    #
-    #     # 提取匹配 'item.php' 的链接并使用spider的parse_item方法进行分析
-    #     #Rule(LinkExtractor(allow=(r'.*/product/.*\.html',)), callback='parse_detail'),
-    # )
-    #
-    # def __init__(self):
-    #     CrawlSpider.__init__(self)
-    #     # use any browser you wish
-    #     self.browser = webdriver.PhantomJS('/Users/gary/Downloads/phantomjs-2.1.1-macosx/bin/phantomjs')
-    #
-    # def __del__(self):
-    #     self.browser.close()
+
     def parse(self, response):
         category_id_list = response.css(".goods-category li")
         for i in category_id_list:
             categoryid = i.css("::attr(data-id)").extract_first("")
             list_url = "https://www.bevol.cn/product?category=%s" % (categoryid)
-            yield Request(url=list_url, meta={'PhantomJS': True,"category_id":categoryid},
-                          callback=self.parse_home)
+            #yield Request(url=list_url, meta={'PhantomJS': True,"category_id":categoryid},
+            #             callback=self.parse_home)
+            yield SplashRequest(url=list_url, meta={"category_id":categoryid},callback=self.parse_home, args={'wait': 0.5})
 
-    def start_requests(self):
-        return [Request("https://www.bevol.cn/product?category=6", meta={'PhantomJS': True}, callback=self.parse)]
+    # def start_requests(self):
+    #     return [Request("https://www.bevol.cn/product?category=6", meta={'PhantomJS': True}, callback=self.parse)]
         # request.meta['PhantomJS'] = True
         # return request
     def parse_home(self,response):
@@ -69,8 +52,10 @@ class MeiLiXiuXing(scrapy.Spider):
             list_page += 1
             link = "product?v=2.0&category=%s&p=%d" % (categoryid,list_page)
             print(parse.urljoin(response.url, link))
-            yield Request(url=parse.urljoin(response.url, link),meta={'PhantomJS': True},
-                          callback=self.parse_list)
+            #yield Request(url=parse.urljoin(response.url, link),meta={'PhantomJS': True},
+            #             callback=self.parse_list)
+            yield SplashRequest(url=parse.urljoin(response.url, link), callback= self.parse_list,
+                                args={'wait': 0.5})
 
 
 
@@ -119,6 +104,7 @@ class MeiLiXiuXing(scrapy.Spider):
         ingredientName = self.getIngredientName(ingredient_links)
 
         product["ingredient"] = ingredientName
+        product["url"] = response.url
 
 
         #print(article_item)
@@ -135,22 +121,9 @@ class MeiLiXiuXing(scrapy.Spider):
         ingredient_item["casNumber"] = p[2]
         ingredient_item["purpose"] =  p[3]
         ingredient_item["brief"] = response.css(".cosmetics-info-title .component-info-box p::text").extract_first("")
+        ingredient_item["url"] = response.url
 
         yield ingredient_item
-
-    # def isMoreData(self,url):
-    #     self.browser.get(url)
-    #     # self.browser.get("https://www.bevol.cn/product?v=2.0&category=6&p=8")
-    #     page_source = self.browser.page_source
-    #
-    #     # 使用scrapy selecor解析网络返回的数据
-    #     t_selector = Selector(text=page_source)
-    #     # pages = t_selector.css(".page-content a::attr(href)").extract()
-    #     p = t_selector.css(".page-content .search-more p::text").extract()
-    #     if p == "对不起，没有搜索到您要的结果，美丽修行建议您：":
-    #         return False
-    #     else:
-    #         return True
 
     def setDefaultProduct(self):
             article_item = MeiLiItem()

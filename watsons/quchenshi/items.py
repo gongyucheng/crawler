@@ -8,29 +8,8 @@
 import scrapy
 
 
-class QuchenshiItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
-# class QuchenshiItem(scrapy.Item):
-#     brandName = scrapy.Field()#品牌名
-#     name = scrapy.Field()  # 商品名
-#     categoryName = scrapy.Field()#品类
-#     colorType = scrapy.Field()#颜色分类
-#     specification = scrapy.Field() #规格
-#     brief = scrapy.Field() #简介
-#     # def get_insert_sql(self):
-#     #     insert_sql = """
-#     #            insert into meiliIngredient(name,englishName,nickname,casNumber,purpose,brief)
-#     #            VALUES (%s, %s, %s, %s, %s,%s)
-#     #        """
-#     #     # ON DUPLICATE KEY UPDATE content=VALUES(fav_nums)
-#     #
-#     #     params = (self["name"], self["englishName"], self["nickname"], self["casNumber"],
-#     #                self["purpose"], self["brief"])
-#     #     return insert_sql, params
-
 class WatsonsItem(scrapy.Item):
+    url = scrapy.Field()
     brand = scrapy.Field()        # 品牌
     productName = scrapy.Field()  # 商品名
     productSeriesName = scrapy.Field()  # 商品系列名称

@@ -28,12 +28,12 @@ DOWNLOAD_DELAY = 0.25
 # 禁用cookie
 COOKIES_ENABLED = False
 
-SPIDER_MIDDLEWARES = {
-   'scrapy_deltafetch.DeltaFetch': 50,
-   #'scrapy_magicfields.MagicFieldsMiddleware': 51,
-}
-DELTAFETCH_ENABLED = True
-DELTAFETCH_RESET = True
+# SPIDER_MIDDLEWARES = {
+#    'scrapy_deltafetch.DeltaFetch': 50,
+#    #'scrapy_magicfields.MagicFieldsMiddleware': 51,
+# }
+# DELTAFETCH_ENABLED = True
+# DELTAFETCH_RESET = True
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS = 100
 
@@ -69,7 +69,7 @@ REDIRECT_ENABLED = False
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'quchenshi.middlewares.PhantomJSMiddleware': 101,
+  # 'quchenshi.middlewares.PhantomJSMiddleware': 101,
     'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,#关闭默认下载器
     #'tubatu.middlewares.RedirectionMiddleware': 998,
     'quchenshi.proxymiddlewares.ProxyMiddleware': 102,
@@ -111,7 +111,7 @@ ITEM_PIPELINES = {
 LOG_LEVEL = 'INFO'
 
 
-MYSQL_HOST = "192.168.1.88"
-MYSQL_DBNAME = "bang"
-MYSQL_USER = "root"
-MYSQL_PASSWORD = "yaochizaocan"
+# MYSQL_HOST = "192.168.1.88"
+# MYSQL_DBNAME = "bang"
+# MYSQL_USER = "root"
+# MYSQL_PASSWORD = "yaochizaocan"

@@ -4,13 +4,11 @@ import datetime
 from scrapy.http import Request
 from  quchenshi.items import WatsonsItem
 from urllib import parse
+import redis,time,threading
 from scrapy.loader import ItemLoader
 import time
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from  selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
-
 class QuchenshiSpider(scrapy.Spider):
     name = 'quchenshi'
 
@@ -63,12 +61,18 @@ class QuchenshiSpider(scrapy.Spider):
         从商品详情页中获取信息, 返回 Item
         """
         item = WatsonsItem()
+        item['url'] = response.url
         item['brand'] = response.css('p.skuBrand::text').extract_first("").strip()
         item['productSeriesName'] = response.css('h5::text').extract_first("").strip()
         item['productName'] = response.css('h3.skuName::text').extract_first("").strip()
         item['price'] = response.css('p.skuPrice i::text').extract_first("").strip()
         item['images'] = ','.join(response.xpath("//div[@class='slide']/img/@supersrc").extract())
-        item['spec'] = response.css('div.skuSelect p em::text')[-1].extract().strip()
+        a =  response.css('div.skuSelect p em::text')
+        spec = response.css('div.skuSelect p em::text').extract()
+        item['spec'] = ""
+        if len(spec) > 0:
+            item['spec'] = spec[-1].strip()
+        #item['spec'] = response.css('div.skuSelect p em::text')[-1].extract().strip()
         item['description'] = response.css('div.skuInfo.skuInfoHeight p').extract_first("")
         #item['place'] = ""
         item['category'] = ""

@@ -14,11 +14,11 @@ from scrapy.pipelines.images import ImagesPipeline
 from scrapy.exporters import JsonItemExporter
 from twisted.enterprise import adbapi
 from scrapy import log
-from lefeng import config
 from scrapy.http import Request
+from meilixiuxing import config
 
-
-redis_data_dict = 'f_url'
+#redis_db = redis.Redis(host='127.0.0.1',port=6379)
+#redis_data_dict = 'f_url'
 class LefengPipeline(object):
     def process_item(self, item, spider):
         return item
@@ -45,7 +45,7 @@ class MysqlTwistedPipline(object):
     @classmethod
     def from_settings(cls, settings):
         dbparms = dict(
-            host=config.MYSQL_HOST,
+            host = config.MYSQL_HOST,
             db=config.MYSQL_DBNAME,
             user=config.MYSQL_USER,
             passwd=config.MYSQL_PASSWORD,
@@ -55,18 +55,20 @@ class MysqlTwistedPipline(object):
             use_unicode=True,
         )
         dbpool = adbapi.ConnectionPool("MySQLdb", **dbparms)
+        #redis_db = redis.Redis(host=settings['REDIS_HOST'],port=settings['REDIS_PORT'],db=settings['REDIS_DB'])
         return cls(dbpool)
 
     def process_item(self, item, spider):
         #使用twisted将mysql插入变成异步执行
         query = self.dbpool.runInteraction(self.do_insert, item)
         query.addErrback(self.handle_error, item, spider) #处理异常
-        # 如果redis里存在这个url，就抛出一个错误的item
-        if config.redis_db.hexists(config.REDIS_LEFENG_URL_KEY, item['url']):
+        #redis_db.hset(redis_data_dict,item['url'])
+        #如果redis里存在这个url，就抛出一个错误的item
+        if config.redis_db.hexists(config.REDIS_MEILI_URL_KEY,item['url']):
             raise DropItem("Duplicate item found: %s" % item)
         else:
-            # 存储url进入redis里
-            config.redis_db.hset(config.REDIS_LEFENG_URL_KEY, item['url'],0)
+            #存储url进入redis里
+            config.redis_db.hset(config.REDIS_MEILI_URL_KEY,item['url'],0)
         return item
 
     def handle_error(self, failure, item, spider):

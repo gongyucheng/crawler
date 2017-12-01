@@ -7,30 +7,17 @@ from scrapy.http import Request
 from urllib import parse
 from scrapy.loader import ItemLoader
 from lefeng.items import LefengItem
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
+
 import time
-from scrapy_redis.spiders import RedisSpider
 
-#class LeFengListSprider(scrapy.Spider):
-class LeFengListSprider(RedisSpider):
-
-    # global page
-    # page = 1
+class LeFengListSprider(scrapy.Spider):
 
     name = "lefeng"
 
     allowed_domains = ["search.lefeng.com","product.lefeng.com","a2.vimage1.com","list.lefeng.com"]
-    resid_key = 'myspider:lefeng_url'
+    #resid_key = 'myspider:lefeng_url'
     url = "http://list.lefeng.com"
-   # start_urls = [url]
-    # rules = (
-    #     # 提取匹配 'category.php' (但不匹配 'subsection.php') 的链接并跟进链接(没有callback意味着follow默认为True)
-    #     Rule(LinkExtractor(allow=(r'http://search.lefeng.com/.*')),process_links='parse_homepage'),
-    #
-    #     # 提取匹配 'item.php' 的链接并使用spider的parse_item方法进行分析
-    #     Rule(LinkExtractor(allow=(r'http://product.lefeng.com/.*')), callback='parse_detail')
-    # )
+    start_urls = [url]
 
 
     def parse(self, response):
@@ -105,7 +92,7 @@ class LeFengListSprider(RedisSpider):
 
         article_item["img"] = img
         article_item["category"] = category_title
-
+        article_item["url"] = response.url
         tab = response.css(".detail-info-table tr")
         for td in tab:
             list = td.css("td::text").extract()
@@ -143,25 +130,6 @@ class LeFengListSprider(RedisSpider):
 
             article_item["number"] = ""
             return article_item
-           # product_copy
-        # title = response.css(".entry-header h1::text").extract()[0]
-        # create_date = response.css("p.entry-meta-hide-on-mobile::text").extract()[0].strip().replace("·","").strip()
-        # praise_nums = response.css(".vote-post-up h10::text").extract()[0]
-        # fav_nums = response.css(".bookmark-btn::text").extract()[0]
-        # match_re = re.match(".*?(\d+).*", fav_nums)
-        # if match_re:
-        #     fav_nums = int(match_re.group(1))
-        # else:
-        #     fav_nums = 0
-        #
-        # comment_nums = response.css("a[href='#article-comment'] span::text").extract()[0]
-        # match_re = re.match(".*?(\d+).*", comment_nums)
-        # if match_re:
-        #     comment_nums = int(match_re.group(1))
-        # else:
-        #     comment_nums = 0
-        #
-        # content = response.css("div.entry").extract()[0]
 
 
 
