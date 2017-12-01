@@ -64,7 +64,9 @@ class LeFengListSprider(scrapy.Spider):
         page_list = list(filter(isNumber, pages))
         print(page_list)
         #获取最大页数
-        max_page = int(page_list[-1])
+        max_page = 0
+        if len(page_list)>0:
+            max_page = int(page_list[-1])
      #迭代分类所有页面数据
         while max_page>1:
             max_page = max_page-1
