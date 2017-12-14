@@ -6,7 +6,7 @@
 # http://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-
+from oko_spider import config
 
 #美丽修行item
 class MeiLiItem(scrapy.Item):
@@ -21,7 +21,7 @@ class MeiLiItem(scrapy.Item):
 
     def get_insert_sql(self):
         insert_sql = """
-               insert ignore into meiliProduct(img,productName,englishName,nickname,importRecord,ingredient)
+               insert ignore into %s""" % config.MEILI_PRODUCT_TABLE_NAME + """(img,productName,englishName,nickname,importRecord,ingredient)
                VALUES (%s, %s, %s, %s, %s,%s)
            """
 
@@ -40,7 +40,7 @@ class MeiLiIngredientItem(scrapy.Item):
     brief = scrapy.Field() #简介
     def get_insert_sql(self):
         insert_sql = """
-               insert into meiliIngredient(name,englishName,nickname,casNumber,purpose,brief)
+               insert into %s""" % config.MEILI_INGREDIENT_TABLE_NAME + """(name,englishName,nickname,casNumber,purpose,brief)
                VALUES (%s, %s, %s, %s, %s,%s)
            """
         # ON DUPLICATE KEY UPDATE content=VALUES(fav_nums)
@@ -68,10 +68,11 @@ class LefengItem(scrapy.Item):
 
     def get_insert_sql(self):
 
+
         insert_sql = """
-                 insert ignore into lefeng(productName, img,brand, remark, description,number,guige,place,category)
-                     VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s)
-              """
+                        insert ignore into %s""" % config.LEFENG_PRODUCT_TABLE_NAME +"""(productName, img,brand, remark, description,number,guige,place,category)
+                            VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s)
+                     """
         # ON DUPLICATE KEY UPDATE content=VALUES(fav_nums)
 
         params = (
@@ -95,7 +96,7 @@ class WatsonsItem(scrapy.Item):
 
     def get_insert_sql(self):
         insert_sql = """
-        insert into watsons_copy1(brand, productName, productSeriesName, images, spec, description, place, category, price)
+        insert into %s""" % config.WATSONS_PRODUCT_TABLE_NAME + """(brand, productName, productSeriesName, images, spec, description, place, category, price)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         params = (self["brand"], self["productName"], self["productSeriesName"], self["images"],

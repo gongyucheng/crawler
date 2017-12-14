@@ -60,7 +60,7 @@ class QuchenshiSpider(scrapy.Spider):
         """
         从商品详情页中获取信息, 返回 Item
         """
-        item = WatsonsItem()
+        item = self.setDefaultItem()
         item['url'] = response.url
         item['brand'] = response.css('p.skuBrand::text').extract_first("").strip()
         item['productSeriesName'] = response.css('h5::text').extract_first("").strip()
@@ -82,4 +82,21 @@ class QuchenshiSpider(scrapy.Spider):
             if  "产地" in placeDict.keys():
                 item['place'] = placeDict["产地"]
         print(list1)
+        return  item
+    def setDefaultItem(self):
+        item = WatsonsItem()
+        item['url'] = ""
+        item['brand'] = ""
+        item['productSeriesName'] = ""
+        item['productName'] = ""
+        item['price'] = ""
+        item['images'] = ""
+        item['spec'] = ""
+
+        item['spec'] = ""
+        # item['spec'] = response.css('div.skuSelect p em::text')[-1].extract().strip()
+        item['description'] = ""
+        # item['place'] = ""
+        item['category'] = ""
+        item['place'] = ""
         return  item

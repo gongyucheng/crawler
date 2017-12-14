@@ -21,6 +21,9 @@ if __name__ == '__main__':
     configure_logging()
     a = get_project_settings()
     runner = CrawlerRunner(a)
+    # d = runner.crawl(MeiLiXiuXing)
+    # d = runner.crawl(QuchenshiSpider)
+    # d = runner.crawl(LeFengListSprider)
     if argu1 == "meili":
         d = runner.crawl(MeiLiXiuXing)
     elif argu1 == "lefeng":

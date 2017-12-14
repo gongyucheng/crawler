@@ -94,7 +94,6 @@ class LeFengListSprider(scrapy.Spider):
         img = response.meta.get("front_image_url", "")  #文章封面图
 
         category_title = response.meta.get("category_title","")
-
         article_item["img"] = img
         article_item["category"] = category_title
         article_item["url"] = response.url
