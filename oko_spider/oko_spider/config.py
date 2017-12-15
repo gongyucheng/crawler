@@ -1,5 +1,5 @@
 import redis
-MYSQL_HOST = "localhost"  #mysql数据库地址
+MYSQL_HOST = "192.168.1.170"  #mysql数据库地址
 MYSQL_DBNAME = "mianmo"		#数据库表明
 MYSQL_USER = "root"			#数据库账户名
 MYSQL_PASSWORD = "123456"	#数据库密码
@@ -9,7 +9,7 @@ MEILI_INGREDIENT_TABLE_NAME = "meiliIngredient"
 WATSONS_PRODUCT_TABLE_NAME = "watsons"
 LEFENG_PRODUCT_TABLE_NAME = "lefeng"
 
-SPLASH_URL = 'http://192.168.1.131:8050'	#splash地址，需要启动容器，修改响应的地址
+SPLASH_URL = 'http://localhost:8050'	#splash地址，需要启动容器，修改响应的地址
 
 REDIS_HOST = '192.168.1.88'				#redis 地址
 REDIS_PORT = 6379

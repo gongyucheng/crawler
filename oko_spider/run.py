@@ -16,28 +16,33 @@ from scrapy.utils.log import configure_logging
 # execute(["scrapy", "crawl", "meili"])
 
 if __name__ == '__main__':
-    argu1 = sys.argv[1]
-
+    # argu1 = sys.argv[1]
+    #
+    # configure_logging()
+    # a = get_project_settings()
+    # runner = CrawlerRunner(a)
+    # # d = runner.crawl(MeiLiXiuXing)
+    # # d = runner.crawl(QuchenshiSpider)
+    # # d = runner.crawl(LeFengListSprider)
+    # if argu1 == "meili":
+    #     d = runner.crawl(MeiLiXiuXing)
+    # elif argu1 == "lefeng":
+    #     d = runner.crawl(LeFengListSprider)
+    # elif argu1 == "watsons":
+    #     d = runner.crawl(QuchenshiSpider)
+    # else:
+    #     d = runner.crawl(MeiLiXiuXing)
+    #     d = runner.crawl(QuchenshiSpider)
+    #     d = runner.crawl(LeFengListSprider)
+    # d.addBoth(lambda _: reactor.stop())
+    #
+    # reactor.run() # the script wi
     configure_logging()
     a = get_project_settings()
     runner = CrawlerRunner(a)
-    # d = runner.crawl(MeiLiXiuXing)
-    # d = runner.crawl(QuchenshiSpider)
-    # d = runner.crawl(LeFengListSprider)
-    if argu1 == "meili":
-        d = runner.crawl(MeiLiXiuXing)
-    elif argu1 == "lefeng":
-        d = runner.crawl(LeFengListSprider)
-    elif argu1 == "watsons":
-        d = runner.crawl(QuchenshiSpider)
-    else:
-        d = runner.crawl(MeiLiXiuXing)
-        d = runner.crawl(QuchenshiSpider)
-        d = runner.crawl(LeFengListSprider)
+    d = runner.crawl(MeiLiXiuXing)
+    #d = runner.crawl(QuchenshiSpider)
+    #d = runner.crawl(LeFengListSprider)
     d.addBoth(lambda _: reactor.stop())
 
-    reactor.run() # the script wi
-    #
-    #print(sys.argv[0])
-    for i in range(0, len(sys.argv)):
-        print(sys.argv[i])
+    reactor.run()  # the script wi
